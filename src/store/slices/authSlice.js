@@ -1,17 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const DEFAULT_STATE = {
+	user: {
+		userName: '',
+		email: '',
+		password: '',
+	},
+	isLogged: false,
+	errorEmail: '',
+	errorPassword: '',
+};
+
+const initialState = (() => {
+	const persistenceState = localStorage.getItem('__redux__state__');
+	if (persistenceState) {
+		return {
+			user: JSON.parse(persistenceState).auth.user,
+			isLogged: JSON.parse(persistenceState).auth.isLogged,
+			errorEmail: '',
+			errorPassword: '',
+		};
+	}
+
+	return DEFAULT_STATE;
+})();
+
 export const authSlice = createSlice({
 	name: 'auth',
-	initialState: {
-		user: {
-			userName: '',
-			email: '',
-			password: '',
-		},
-		isLogged: false,
-		errorEmail: '',
-		errorPassword: '',
-	},
+	initialState,
 	reducers: {
 		authRegister: (state, action) => {
 			state.user = {

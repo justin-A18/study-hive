@@ -1,73 +1,23 @@
-import { useForm } from 'react-hook-form';
-import { useEffect, useId, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	authLogged,
-	setErrMessageEmail,
-	setErrMessagePass,
-} from '../../store/slices/authSlice';
+import { Link } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 
 export const LoginPage = () => {
-	const [showPassword, setShowPassword] = useState(false);
-	const [errEmail, setErrEmail] = useState('');
-	const [errPassword, setErrPassword] = useState('');
-	const navigate = useNavigate();
-
-	const dispatch = useDispatch();
-	const { user, errorEmail, errorPassword } = useSelector(
-		(state) => state.auth
-	);
-
 	const {
 		register,
+		errors,
+		errEmail,
+		errPassword,
+		showPassword,
+		loginEmailId,
+		loginPasswordId,
 		handleSubmit,
-		formState: { errors },
-		reset,
-	} = useForm({
-		defaultValues: {
-			email: '',
-			password: '',
-		},
-	});
-
-	useEffect(() => {
-		setErrEmail(errorEmail);
-		setErrPassword(errorPassword);
-	}, [errors, errorEmail, errorPassword]);
-
-	const loginEmailId = useId();
-	const loginPasswordId = useId();
-
-	const handleShowPassword = () => {
-		setShowPassword((prev) => !prev);
-	};
-
-	const onSubmit = (e) => {
-		if (e.email !== user.email) {
-			dispatch(setErrMessageEmail('El email no existe, registrese por favor.'));
-			return;
-		}
-
-		if (e.password !== user.password) {
-			dispatch(setErrMessagePass('Contraseña incorrecta'));
-			return;
-		}
-
-		const logged = true;
-		dispatch(authLogged(logged));
-
-		reset();
-
-		navigate('/', {
-			replace: true,
-		});
-	};
+		handleShowPassword,
+	} = useLogin();
 
 	return (
 		<form
 			className='flex flex-col gap-5'
-			onSubmit={handleSubmit(onSubmit)}>
+			onSubmit={handleSubmit}>
 			<legend className='text-2xl'>Login</legend>
 			<div className='w-full flex flex-col gap-1'>
 				<div className='w-full h-12 flex items-center'>

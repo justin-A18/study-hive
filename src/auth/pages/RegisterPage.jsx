@@ -1,54 +1,22 @@
-import { useId, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { authRegister } from '../../store/slices/authSlice';
+import { Link } from 'react-router-dom';
+import { useRegister } from '../hooks/useRegister';
 
 export const RegisterPage = () => {
-	const [showPassword, setShowPassword] = useState(false);
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-
 	const {
+		errors,
 		register,
 		handleSubmit,
-		reset,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			email: '',
-			username: '',
-			password: '',
-		},
-	});
-
-	const registerEmailId = useId();
-	const registerPasswordId = useId();
-	const registerUserNameId = useId();
-
-	const handleShowPassword = () => {
-		setShowPassword((prev) => !prev);
-	};
-
-	const onSubmit = (e) => {
-		const userData = {
-			username: e.username,
-			email: e.email,
-			password: e.password,
-		};
-
-		dispatch(authRegister(userData));
-		reset();
-
-		navigate('/auth/login', {
-			replace: true,
-		});
-	};
+		showPassword,
+		registerEmailId,
+		registerPasswordId,
+		registerUserNameId,
+		handleShowPassword,
+	} = useRegister();
 
 	return (
 		<form
 			className='flex flex-col gap-5'
-			onSubmit={handleSubmit(onSubmit)}>
+			onSubmit={handleSubmit}>
 			<legend className='text-2xl'>Creat your account</legend>
 
 			<div className='w-full flex flex-col gap-1'>

@@ -1,8 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+const DEFAULT_STATE = {
 	boards: [],
 };
+
+const initialState = (() => {
+	const persistenceState = localStorage.getItem('__redux__state__');
+
+	if (persistenceState) {
+		return {
+			boards: JSON.parse(persistenceState).board.boards,
+		};
+	}
+
+	return DEFAULT_STATE;
+})();
 
 export const boardSlice = createSlice({
 	name: 'board',
@@ -10,6 +22,21 @@ export const boardSlice = createSlice({
 	reducers: {
 		addNewBoard: (state, action) => {
 			state.boards = [...state.boards, action.payload];
+		},
+		editBoard: (state, action) => {
+			state.boards = state.boards.map((board) => {
+				if (board.id === action.payload.boardId) {
+					return {
+						...board,
+						title: action.payload.newValue,
+					};
+				}
+
+				return board;
+			});
+		},
+		deleteBoard: (state, action) => {
+			state.boards = state.boards.filter((board) => board.id != action.payload);
 		},
 		addNewCard: (state, action) => {
 			state.boards = state.boards.map((board) => {
@@ -44,4 +71,5 @@ export const boardSlice = createSlice({
 	},
 });
 
-export const { addNewBoard, addNewCard, addNewList } = boardSlice.actions;
+export const { addNewBoard, addNewCard, addNewList, editBoard, deleteBoard } =
+	boardSlice.actions;

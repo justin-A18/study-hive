@@ -35,7 +35,7 @@ export const NavBar = ({ onOpenMenu }) => {
 					</li>
 				</ul>
 
-				<div className='flex flex-col items-center gap-4'>
+				<div className='flex lg:flex-col items-center gap-4'>
 					<button
 						className='flex items-center justify-center size-10 text-white hover:text-red-600 transition-colors duration-300'
 						onClick={handleLogout}>
