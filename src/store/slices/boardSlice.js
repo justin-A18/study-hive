@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 const DEFAULT_STATE = {
 	boards: [],
 };
@@ -49,6 +48,40 @@ export const boardSlice = createSlice({
 				return board;
 			});
 		},
+		editCard: (state, action) => {
+			state.boards = state.boards.map((board) => {
+				if (board.id === action.payload.boardId) {
+					return {
+						...board,
+						cards: board.cards.map((card) => {
+							if (card.id === action.payload.cardId) {
+								return {
+									...card,
+									title: action.payload.newValue,
+								};
+							}
+							return card;
+						}),
+					};
+				}
+
+				return board;
+			});
+		},
+		deleteCard: (state, action) => {
+			state.boards = state.boards.map((board) => {
+				if (board.id === action.payload.boardId) {
+					return {
+						...board,
+						cards: board.cards.filter(
+							(card) => card.id != action.payload.cardId
+						),
+					};
+				}
+
+				return board;
+			});
+		},
 		addNewList: (state, action) => {
 			state.boards = state.boards.map((board) => {
 				if (board.id === action.payload.boardId) {
@@ -68,8 +101,68 @@ export const boardSlice = createSlice({
 				return board;
 			});
 		},
+		editList: (state, action) => {
+			state.boards = state.boards.map((board) => {
+				if (board.id === action.payload.boardId) {
+					return {
+						...board,
+						cards: board.cards.map((card) => {
+							if (card.id === action.payload.cardId) {
+								return {
+									...card,
+									list: card.list.map((li) => {
+										if (li.id === action.payload.listId) {
+											return {
+												...li,
+												title: action.payload.newList.title,
+												description: action.payload.newList.description,
+											};
+										}
+										return li;
+									}),
+								};
+							}
+							return card;
+						}),
+					};
+				}
+				return board;
+			});
+		},
+		deleteList: (state, action) => {
+			state.boards = state.boards.map((board) => {
+				if (board.id === action.payload.boardId) {
+					return {
+						...board,
+						cards: board.cards.map((card) => {
+							if (card.id === action.payload.cardId) {
+								return {
+									...card,
+									list: card.list.filter(
+										(li) => li.id != action.payload.listId
+									),
+								};
+							}
+
+							return card;
+						}),
+					};
+				}
+
+				return board;
+			});
+		},
 	},
 });
 
-export const { addNewBoard, addNewCard, addNewList, editBoard, deleteBoard } =
-	boardSlice.actions;
+export const {
+	addNewBoard,
+	editBoard,
+	deleteBoard,
+	addNewCard,
+	editCard,
+	deleteCard,
+	addNewList,
+	editList,
+	deleteList,
+} = boardSlice.actions;

@@ -67,26 +67,29 @@ export const SideBar = ({ onOpenModal, isOpen }) => {
 							key={index}
 							id={board.id}
 							onDoubleClick={() => handleEdited(board.id, board.title)}>
-							{!isEdited ? (
+							{!isEdited || boardId !== board.id ? (
 								<Link
-									className='flex items-center justify-between group'
+									className='w-full group'
 									to={`/board/${board.id}`}>
-									<div className='flex items-center gap-2'>
+									<div className='flex items-center gap-2 w-full relative'>
 										<i className='bx bx-columns bx-sm'></i>
-										<span>{board.title}</span>
+										<span
+											className='w-full'
+											style={{ maxWidth: '80%', overflowWrap: 'break-word' }}>
+											{board.title}
+										</span>
+										<button
+											className='text-red-500 md:opacity-0 md:invisible group-hover:opacity-100 group-hover:visible  transition-opacity duration-300 absolute top-[50%] translate-y-[-50%] right-[-8px]'
+											onClick={() => dispatch(deleteBoard(board.id))}>
+											<i className='bx bx-trash-alt bx-sm'></i>
+										</button>
 									</div>
-									<button
-										className='text-red-500 opacity-0 invisible group-hover:opacity-100 group-hover:visible  transition-opacity duration-300'
-										onClick={() => dispatch(deleteBoard(board.id))}>
-										<i className='bx bx-trash-alt bx-sm'></i>
-									</button>
 								</Link>
 							) : (
 								<form onSubmit={handleSubmit(onSubmit)}>
 									<input
 										type='text'
 										{...register('boardEdit')}
-										defaultValue={board.title}
 										className='w-full bg-transparent outline-none'
 										autoFocus
 									/>

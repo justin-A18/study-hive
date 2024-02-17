@@ -17,8 +17,7 @@ export const CreateList = ({ isOpen, onOpenModal, cardId, boardId }) => {
 		const newList = {
 			id: uuidv4(),
 			title: e.namelist,
-			description: '',
-			comments: [],
+			description: 'change the text',
 		};
 
 		dispatch(
